@@ -35,3 +35,20 @@ instance.on('update', () => {
   console.log('Updated!');
 });
 ```
+
+## Methods
+This mixin exposes the following methods on the target object: 
+
+### On
+Binds a callback to an event name.
+
+#### Syntax
+instance.on(eventName, callback [, eventID]);
+
+#### Parameters
+Parameter | Description
+--- | ---
+eventName | The name of the 'event' to listen for. This can be a comma separated list of values. Note: this does not bind to standard DOM events.
+callback | The code to run when the event is called.
+eventID | A unique identifier used for removing an event listener.
+
