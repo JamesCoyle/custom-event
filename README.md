@@ -4,6 +4,7 @@ A simple decorator function to allow a class to provide event-like callback bind
 
 ## Usage
 
+```js
 @custom-event
 class MyClass
 {
@@ -12,3 +13,4 @@ class MyClass
     this._call('constructed');
   }
 }
+```
