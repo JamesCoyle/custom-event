@@ -1,0 +1,19 @@
+{
+  "name": "custom-event",
+  "version": "1.0.0",
+  "description": "A simple decorator function to allow a class to provide event-like callback bindings which are triggerable within that class.",
+  "main": "custom-event.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamesCoyle/custom-event.git"
+  },
+  "author": "James Coyle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JamesCoyle/custom-event/issues"
+  },
+  "homepage": "https://github.com/JamesCoyle/custom-event#readme"
+}
