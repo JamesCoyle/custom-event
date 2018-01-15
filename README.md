@@ -52,3 +52,5 @@ eventName | The name of the 'event' to listen for. This can be a comma separated
 callback | The code to run when the event is called.
 eventID | A unique identifier used for removing an event listener.
 
+#### Return value
+The the object the event was bound on. This allows the `on` method to be chained.
