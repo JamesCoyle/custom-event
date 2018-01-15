@@ -5,6 +5,8 @@ A simple decorator function to allow a class to provide event-like callback bind
 ## Usage
 
 ```js
+import customEvent from './custom-exent.js';
+
 @customEvent
 class MyClass
 {
