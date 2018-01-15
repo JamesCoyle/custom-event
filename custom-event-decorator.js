@@ -1,13 +1,8 @@
-export default (superclass) => class extends superclass
+export default function (target)
 {
-	constructor()
-	{
-		super();
+	target._event = [];
 
-		this._event = [];
-	}
-
-	on(evnt, callback, name)
+	target.on = function (evnt, callback, name)
 	{
 		// return if malformed
 		if (typeof evnt !== 'string' || typeof callback !== 'function') return;
@@ -30,9 +25,9 @@ export default (superclass) => class extends superclass
 		});
 
 		return this;
-	}
+	};
 
-	removeBinding(evnt, name)
+	target.removeBinding = function (evnt, name)
 	{
 		if (Array.isArray(this._event[evnt]))
 		{
@@ -42,19 +37,19 @@ export default (superclass) => class extends superclass
 					array.splice(i, 1)
 			}
 		}
-	}
+	};
 
-	_eventBound(evnt)
+	target._eventBound = function (evnt)
 	{
 		return (Array.isArray(this._event[evnt]) && this._event[evnt].length > 0);
-	}
+	};
 
-	_eventAdded()
+	target._eventAdded = function ()
 	{
 		// override this
-	}
+	};
 
-	_call(evnt, ...args)
+	target._call = function (evnt, ...args)
 	{
 		if (Array.isArray(this._event[evnt]))
 			this._event[evnt].forEach(function (evnt)
@@ -64,5 +59,5 @@ export default (superclass) => class extends superclass
 					evnt.callback(...args);
 				}
 			});
-	}
+	};
 }
