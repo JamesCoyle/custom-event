@@ -4,7 +4,7 @@ export default (superclass) => class extends superclass
 	{
 		super();
 
-		this._event = [];
+		this._events = new Map;
 	}
 
 	on(evnt, callback, name)
@@ -13,56 +13,94 @@ export default (superclass) => class extends superclass
 		if (typeof evnt !== 'string' || typeof callback !== 'function') return;
 
 		// loop through comma separated list
-		evnt.split(/\s*,\s*/).forEach((e) =>
+		evnt.split(',').forEach((e) =>
 		{
-			// create array if doesn't exist
-			if (!Array.isArray(this._event[e]))
-				this._event[e] = [];
+			// remove whitespace
+			e = e.trim();
 
 			// add event callback
-			this._event[e].push(
+			this.addEventListener(e, callback);
+
+			// create array if doesn't exist
+			this._events.has(evnt) || this._events.set(evnt, []);
+
+			// cache event callback
+			this._events.get(e).push(
 			{
 				name: name,
 				callback: callback
 			});
-
-			this._eventAdded(e);
 		});
 
 		return this;
 	}
 
-	removeBinding(evnt, name)
+	removeListenerFor(evnt, identifier)
 	{
-		if (Array.isArray(this._event[evnt]))
+		let bindings = this._events.get(evnt),
+			property;
+
+		// determine if should check name or callback function
+		switch (typeof identifier)
 		{
-			for (let i = this._event[evnt].length; i > 0; --i)
+			case 'string':
+				property = 'name';
+				break;
+
+			case 'function':
+				property = 'callback';
+				break;
+
+			default:
+				return;
+		}
+
+		// check for match and remove event if found
+		for (let i = bindings.length; --i >= 0;)
+		{
+			if (bindings[i][property] === identifier)
 			{
-				if (evnt[i].name == name)
-					array.splice(i, 1)
+				// remove event
+				this.removeEventListener(evnt, bindings[i].callback);
+
+				// clear event cache
+				bindings.splice(i, 1);
 			}
 		}
+
+		return this;
 	}
 
-	_eventBound(evnt)
+	removeAllListenersFor(evnt)
 	{
-		return (Array.isArray(this._event[evnt]) && this._event[evnt].length > 0);
+		// return if event doesn't exist
+		this._events.has(evnt) ||
+			return this;
+
+		// remove all event listeners for this event
+		this._events.get(evnt).forEach((e) =>
+		{
+			this.removeEventListener(evnt, e.callback);
+		});
+
+		// clear event cache
+		this._events.delete(evnt);
+
+		return this;
 	}
 
-	_eventAdded()
+	hasListenerFor(evnt)
 	{
-		// override this
+		if (!this._events.has(evnt))
+			return false;
+
+		let bindings = this._events.get(evnt);
+
+		return Array.isArray(bindings) && bindings.length > 0;
 	}
 
-	_call(evnt, ...args)
+	_emit(evnt, ...args)
 	{
-		if (Array.isArray(this._event[evnt]))
-			this._event[evnt].forEach(function (evnt)
-			{
-				if (typeof evnt.callback == 'function')
-				{
-					evnt.callback(...args);
-				}
-			});
+		this.dispatchEvent();
 	}
 }
