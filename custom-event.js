@@ -74,7 +74,7 @@ export default (superclass) => class extends superclass
 	removeAllListenersFor(evnt)
 	{
 		// return if event doesn't exist
-		this._events.has(evnt) ||
+		if (!this._events.has(evnt))
 			return this;
 
 		// remove all event listeners for this event
@@ -101,6 +101,9 @@ export default (superclass) => class extends superclass
 
 	_emit(evnt, ...args)
 	{
-		this.dispatchEvent();
+		this.dispatchEvent(new CustomEvent(evnt,
+		{
+			detail: args
+		}));
 	}
 }
